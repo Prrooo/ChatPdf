@@ -11,5 +11,6 @@ export const POST = async (req: Request) => {
     .select()
     .from(messages)
     .where(eq(messages.chatId, chatId));
+    console.log("db messages = ",_messages);
   return NextResponse.json(_messages);
 };

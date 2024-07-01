@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { useChat } from "ai/react";
 import { Button } from "./ui/button";
@@ -11,6 +11,11 @@ import { Message } from "ai";
 
 type Props = { chatId: number };
 
+interface output {
+  status: string;
+  gen: string;
+}
+
 const ChatComponent = ({ chatId }: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: ["chat", chatId],
@@ -18,6 +23,7 @@ const ChatComponent = ({ chatId }: Props) => {
       const response = await axios.post<Message[]>("/api/get-messages", {
         chatId,
       });
+      console.log("chat response = ", response);
       return response.data;
     },
   });
@@ -29,6 +35,21 @@ const ChatComponent = ({ chatId }: Props) => {
     },
     initialMessages: data || [],
   });
+
+  // const [newMess, setNewMess] = useState("");
+
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.post("/api/chat");
+  //     console.log("fetch data response ",response.data);
+  //     if (response) {
+  //       setNewMess(response.data.gen);
+  //     }
+  //   } catch (error) {
+  //     console.log("error while fetching data ", error);
+  //   }
+  // };
+
   React.useEffect(() => {
     const messageContainer = document.getElementById("message-container");
     if (messageContainer) {
@@ -39,10 +60,7 @@ const ChatComponent = ({ chatId }: Props) => {
     }
   }, [messages]);
   return (
-    <div
-      className="relative max-h-screen overflow-scroll"
-      id="message-container"
-    >
+    <div className="relative h-screen overflow-scroll" id="message-container">
       {/* header */}
       <div className="sticky top-0 inset-x-0 p-2 bg-white h-fit">
         <h3 className="text-xl font-bold">Chat</h3>
@@ -53,7 +71,7 @@ const ChatComponent = ({ chatId }: Props) => {
 
       <form
         onSubmit={handleSubmit}
-        className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white"
+        className=" absolute bottom-0 inset-x-0 px-2 py-4 bg-white"
       >
         <div className="flex">
           <Input

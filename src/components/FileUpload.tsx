@@ -8,7 +8,6 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-// https://github.com/aws/aws-sdk-js-v3/issues/4126
 
 const FileUpload = () => {
   const router = useRouter();
